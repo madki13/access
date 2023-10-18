@@ -68,8 +68,7 @@ class PresensiController extends Controller
     public function actionCreate()
     {
         $model = new Presensi();
-        $model->tanggal
-         = date('d/m/Y');
+        $model->tanggal = date('d/m/Y');
 
 
         if ($this->request->isPost) {

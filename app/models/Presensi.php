@@ -3,6 +3,10 @@
 namespace app\models;
 
 use Yii;
+use yii\behaviors\TimestampBehavior; // Tambahkan baris ini
+use yii\db\ActiveRecord;
+
+
 
 /**
  * This is the model class for table "presensi".
@@ -39,10 +43,10 @@ class Presensi extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['name', 'tanggal', 'jam_in', 'jam_out', 'foto_in', 'foto_out', 'lokasi_in', 'lokasi_out', 'ketarangan_in', 'keterangan_out'], 'required'],
+            [['name', 'tanggal', 'jam_out', 'foto_in', 'foto_out', 'lokasi_in', 'lokasi_out', 'ketarangan_in', 'keterangan_out'], 'required'],
             [['tanggal'], 'safe'],
-            [['jam_out', 'created_at', 'created_by', 'updated_at', 'updated_by'], 'integer'],
-            [['name', 'jam_in', 'foto_in', 'foto_out', 'lokasi_in', 'lokasi_out', 'ketarangan_in', 'keterangan_out'], 'string', 'max' => 255],
+            [['jam_in', 'jam_out', 'created_at', 'created_by', 'updated_at', 'updated_by'], 'integer'],
+            [['name', 'foto_in', 'foto_out', 'lokasi_in', 'lokasi_out', 'ketarangan_in', 'keterangan_out'], 'string', 'max' => 255],
         ];
     }
 
@@ -67,6 +71,21 @@ class Presensi extends \yii\db\ActiveRecord
             'created_by' => 'Created By',
             'updated_at' => 'Updated At',
             'updated_by' => 'Updated By',
+        ];
+    }
+
+    public function behaviors()
+    {
+        return [
+            [
+                'class' => TimestampBehavior::className(),
+                'attributes' => [
+                    ActiveRecord::EVENT_BEFORE_INSERT => 'jam_in',
+                ],
+                'value' => function () {
+                    return date('Y-m-d H:i:s');
+                },
+            ],
         ];
     }
 }
